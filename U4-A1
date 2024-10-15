@@ -1,0 +1,116 @@
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
+
+abstract class Item {
+    private final String nombre;
+    private final String descripcion;
+
+    public Item(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Item item = (Item) obj;
+        return nombre.equals(item.nombre);
+    }
+
+    @Override
+    public int hashCode() {
+        return nombre.hashCode();
+    }
+}
+
+
+class ItemMiscelaneo extends Item {
+    public ItemMiscelaneo(String nombre, String descripcion) {
+        super(nombre, descripcion);
+    }
+}
+
+
+class Armadura extends Item {
+    private final int defensa;
+
+    public Armadura(String nombre, String descripcion, int defensa) {
+        super(nombre, descripcion);
+        this.defensa = defensa;
+    }
+
+    public int getDefensa() {
+        return defensa;
+    }
+}
+
+class Arma extends Item {
+    private final int ataque;
+
+    public Arma(String nombre, String descripcion, int ataque) {
+        super(nombre, descripcion);
+        this.ataque = ataque;
+    }
+
+    public int getAtaque() {
+        return ataque;
+    }
+}
+
+
+class Inventario {
+    private final ArrayList<Item> items;
+
+    public Inventario() {
+        items = new ArrayList<>();
+    }
+
+    public void agregarItem(Item item) {
+        if (!items.contains(item)) {
+            items.add(item);
+        } else {
+            JOptionPane.showMessageDialog(null, "El item ya está en el inventario.");
+        }
+    }
+
+    public void mostrarInventario() {
+        StringBuilder inventarioStr = new StringBuilder("Inventario:\n");
+        for (Item item : items) {
+            inventarioStr.append(item.getNombre())
+                         .append(": ")
+                         .append(item.getDescripcion())
+                         .append("\n");
+        }
+        JOptionPane.showMessageDialog(null, inventarioStr.toString());
+    }
+}
+
+
+public class Equipo5 {
+    public static void main(String[] args) {
+        Inventario inventario = new Inventario();
+
+        
+        ItemMiscelaneo pocion = new ItemMiscelaneo("Semillas del Ermitaño", "Cura 50 puntos de vida.");
+        Armadura armadura = new Armadura("Pistaches en Salsa Verde", "Alta protección.", 10);
+        Arma espada = new Arma("Forfyay", "Corta a los enemigos fuertemente.", 12);
+        
+       
+        inventario.agregarItem(pocion);
+        inventario.agregarItem(armadura);
+        inventario.agregarItem(espada);
+
+        
+        inventario.mostrarInventario();
+    }
+}
