@@ -112,7 +112,7 @@ public class MainWindow extends JFrame {
 
     private JPanel crearPanelJuego() {
         JPanel panelJuego = new JPanel(new BorderLayout()); // Usar BorderLayout para posicionar elementos
-        panelJuego.setBackground(new Color(234, 239, 236));
+        panelJuego.setBackground(new Color(234, 239, 234));
         panelJuego.setPreferredSize(new Dimension(400, 500));
 
         // Crear las imágenes
