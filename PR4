@@ -1,0 +1,124 @@
+package com.mycompany.juegodereyes;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class JuegoDeReyesGUI {
+    private static JTextArea areaTexto;
+    private static JLabel barraEstado;
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Juego de Reyes");
+        frame.setSize(800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+
+      
+        barraEstado = new JLabel("Salud: 100 | Nivel: 1 | Ataque: 15 | Defensa: 5");
+        barraEstado.setHorizontalAlignment(SwingConstants.CENTER);
+        barraEstado.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        frame.add(barraEstado, BorderLayout.NORTH);
+
+        
+        JPanel panelJuego = new JPanel();
+        panelJuego.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        JLabel labelJuego = new JLabel("Aquí va la representación visual del juego");
+        panelJuego.add(labelJuego);
+        frame.add(panelJuego, BorderLayout.CENTER);
+
+        
+        areaTexto = new JTextArea(10, 50);
+        areaTexto.setEditable(false);
+        JScrollPane scroll = new JScrollPane(areaTexto);
+        frame.add(scroll, BorderLayout.EAST);
+
+       
+        JPanel panelBotones = new JPanel();
+        frame.add(panelBotones, BorderLayout.SOUTH);
+
+        
+        Personaje luigi = new Personaje("Luigi", 100, 15, 5);
+        Enemigo mbappe = new Enemigo("Mbappé", 50, 10, 2);
+        Pocion pocionHuesoDePlatano = new Pocion("Hueso de Plátano", 20);
+        Arma armaForyfay = new Arma("Foryfay", 5);
+        Mapa mundoDeLasMaravillas = new Mapa("Mundo de las Maravillas");
+        mundoDeLasMaravillas.agregarEnemigo(mbappe);
+
+        
+        areaTexto.append("Explorando en: " + mundoDeLasMaravillas.getNombre() + "\n");
+
+        
+        JButton botonAtacar = new JButton("Atacar");
+        JButton botonUsarPocion = new JButton("Usar Poción");
+        JButton botonUsarArma = new JButton("Equipar Arma");
+        panelBotones.add(botonAtacar);
+        panelBotones.add(botonUsarPocion);
+        panelBotones.add(botonUsarArma);
+
+        
+        botonAtacar.addActionListener(e -> realizarBatalla(luigi, mbappe));
+        botonUsarPocion.addActionListener(e -> {
+            pocionHuesoDePlatano.usar(luigi, areaTexto);
+            actualizarBarraEstado(luigi);
+        });
+        botonUsarArma.addActionListener(e -> {
+            armaForyfay.usar(luigi, areaTexto);
+            actualizarBarraEstado(luigi);
+        });
+
+        
+        JPanel panelImagenes = new JPanel(new GridLayout(1, 3)); 
+        frame.add(panelImagenes, BorderLayout.WEST); 
+
+        
+        JPanel panelTortuga = new JPanel();
+        panelTortuga.setBackground(Color.GREEN); 
+        JLabel tortugaLabel = crearEtiquetaImagen("/images/tortuga.png");
+        panelTortuga.add(tortugaLabel);
+        panelImagenes.add(panelTortuga);
+
+        
+        JPanel panelPistola = new JPanel();
+        panelPistola.setBackground(Color.RED); 
+        JLabel pistolaLabel = crearEtiquetaImagen("/images/pistola.png");
+        panelPistola.add(pistolaLabel);
+        panelImagenes.add(panelPistola);
+
+      
+        JPanel panelJuegoVisual = new JPanel();
+        panelJuegoVisual.setBackground(Color.BLUE); // Fondo azul
+        JLabel juegoLabel = new JLabel("Vista del juego aquí");
+        panelJuegoVisual.add(juegoLabel);
+        panelImagenes.add(panelJuegoVisual);
+
+        frame.setVisible(true);
+    }
+
+    
+    private static JLabel crearEtiquetaImagen(String ruta) {
+        ImageIcon icono = new ImageIcon(JuegoDeReyesGUI.class.getResource(ruta));
+        if (icono.getImageLoadStatus() == MediaTracker.ERRORED) {
+            return new JLabel("Imagen no encontrada");
+        } else {
+            return new JLabel(icono);
+        }
+    }
+
+    private static void realizarBatalla(Personaje atacante, Enemigo defensor) {
+        if (atacante.estaVivo() && defensor.estaVivo()) {
+            atacante.atacar(defensor, areaTexto);
+            if (defensor.estaVivo()) {
+                defensor.atacar(atacante, areaTexto);
+                actualizarBarraEstado(atacante);
+            } else {
+                areaTexto.append(defensor.getNombre() + " ha sido derrotado.\n");
+            }
+        } else {
+            areaTexto.append("No se puede realizar la batalla. Alguien está muerto.\n");
+        }
+    }
+
+    private static void actualizarBarraEstado(Personaje personaje) {
+        barraEstado.setText(String.format("Salud: %d | Ataque: %d | Defensa: %d", personaje.getSalud(), personaje.getAtaque(), personaje.defensa));
+    }
+}

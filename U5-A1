@@ -1,0 +1,232 @@
+package com.mycompany.juegodereyes;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+class Personaje {
+    protected String nombre;
+    protected int salud;
+    protected int ataque;
+    protected int defensa;
+
+    public Personaje(String nombre, int salud, int ataque, int defensa) {
+        this.nombre = nombre;
+        this.salud = salud;
+        this.ataque = ataque;
+        this.defensa = defensa;
+    }
+
+    public void recibirDanio(int danio, JTextArea areaTexto) {
+        int danioReal = Math.max(0, danio - defensa);
+        salud = Math.max(0, salud - danioReal);  // Asegura que la salud no sea negativa
+        mostrarMensaje(String.format("%s recibió %d de daño.", nombre, danioReal), areaTexto);
+    }
+
+    public boolean estaVivo() {
+        return salud > 0;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public int getSalud() {
+        return salud;
+    }
+
+    public int getAtaque() {
+        return ataque;
+    }
+
+    public void atacar(Personaje defensor, JTextArea areaTexto) {
+        mostrarMensaje(String.format("%s ataca a %s", nombre, defensor.getNombre()), areaTexto);
+        defensor.recibirDanio(ataque, areaTexto);
+    }
+
+    private void mostrarMensaje(String mensaje, JTextArea areaTexto) {
+        areaTexto.append(mensaje + "\n");
+    }
+}
+
+class Enemigo extends Personaje {
+    public Enemigo(String nombre, int salud, int ataque, int defensa) {
+        super(nombre, salud, ataque, defensa);
+    }
+
+    @Override
+    public void atacar(Personaje objetivo, JTextArea areaTexto) {
+        mostrarMensaje(String.format("%s ataca a %s", nombre, objetivo.getNombre()), areaTexto);
+        objetivo.recibirDanio(ataque, areaTexto);
+    }
+
+
+
+    private void mostrarMensaje() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void mostrarMensaje(String format, JTextArea areaTexto) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+}
+
+abstract class Item {
+    protected String nombre;
+
+    public Item(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public abstract void usar(Personaje personaje, JTextArea areaTexto);
+}
+
+class Pocion extends Item {
+    private final int cantidadRecuperada;
+
+    public Pocion(String nombre, int cantidadRecuperada) {
+        super(nombre);
+        this.cantidadRecuperada = cantidadRecuperada;
+    }
+
+    @Override
+    public void usar(Personaje personaje, JTextArea areaTexto) {
+        personaje.salud = Math.min(100, personaje.salud + cantidadRecuperada);  // Limita la salud máxima
+        mostrarMensaje(String.format("%s ha recuperado %d de salud.", personaje.getNombre(), cantidadRecuperada), areaTexto);
+    }
+
+    private void mostrarMensaje(String mensaje, JTextArea areaTexto) {
+        areaTexto.append(mensaje + "\n");
+    }
+}
+
+class Arma extends Item {
+    private final int incrementoAtaque;
+
+    public Arma(String nombre, int incrementoAtaque) {
+        super(nombre);
+        this.incrementoAtaque = incrementoAtaque;
+    }
+
+    @Override
+    public void usar(Personaje personaje, JTextArea areaTexto) {
+        personaje.ataque += incrementoAtaque;
+        mostrarMensaje(String.format("%s ha equipado %s. Ataque aumentado en %d.", personaje.getNombre(), nombre, incrementoAtaque), areaTexto);
+    }
+
+    private void mostrarMensaje(String mensaje, JTextArea areaTexto) {
+        areaTexto.append(mensaje + "\n");
+    }
+}
+
+class Mapa {
+    private final String nombre;
+    private final List<Enemigo> enemigos;
+
+    public Mapa(String nombre) {
+        this.nombre = nombre;
+        enemigos = new ArrayList<>();
+    }
+
+    public void agregarEnemigo(Enemigo enemigo) {
+        enemigos.add(enemigo);
+    }
+
+    public void mostrarEnemigos(JTextArea areaTexto) {
+        StringBuilder lista = new StringBuilder("Enemigos en el mapa:\n");
+        for (Enemigo enemigo : enemigos) {
+            lista.append(String.format("Enemigo: %s - Salud: %d\n", enemigo.getNombre(), enemigo.getSalud()));
+        }
+        areaTexto.append(lista.toString());
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+}
+
+public class JuegoDeReyesGUI {
+    private static JTextArea areaTexto;
+    private static JLabel barraEstado;
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Juego de Reyes");
+        frame.setSize(800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+
+        
+        barraEstado = new JLabel("Salud: 100 | Nivel: 1 | Ataque: 15 | Defensa: 5");
+        barraEstado.setHorizontalAlignment(SwingConstants.CENTER);
+        barraEstado.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        frame.add(barraEstado, BorderLayout.NORTH);
+
+        
+        JPanel panelJuego = new JPanel();
+        panelJuego.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        JLabel labelJuego = new JLabel("Aquí va la representación visual del juego");
+        panelJuego.add(labelJuego);
+        frame.add(panelJuego, BorderLayout.CENTER);
+
+        
+        areaTexto = new JTextArea(10, 50);
+        areaTexto.setEditable(false);
+        JScrollPane scroll = new JScrollPane(areaTexto);
+        frame.add(scroll, BorderLayout.EAST);
+
+        
+        JPanel panelBotones = new JPanel();
+        frame.add(panelBotones, BorderLayout.SOUTH);
+
+        Personaje luigi = new Personaje("Luigi", 100, 15, 5);
+        Enemigo mbappe = new Enemigo("Mbappé", 50, 10, 2);
+
+        Pocion pocionHuesoDePlatano = new Pocion("Hueso de Plátano", 20);
+        Arma armaForyfay = new Arma("Foryfay", 5);
+
+        Mapa mundoDeLasMaravillas = new Mapa("Mundo de las Maravillas");
+        mundoDeLasMaravillas.agregarEnemigo(mbappe);
+
+        areaTexto.append("Explorando en: " + mundoDeLasMaravillas.getNombre() + "\n");
+
+        
+        JButton botonAtacar = new JButton("Atacar");
+        JButton botonUsarPocion = new JButton("Usar Poción");
+        JButton botonUsarArma = new JButton("Equipar Arma");
+        panelBotones.add(botonAtacar);
+        panelBotones.add(botonUsarPocion);
+        panelBotones.add(botonUsarArma);
+
+        botonAtacar.addActionListener(e -> realizarBatalla(luigi, mbappe));
+        botonUsarPocion.addActionListener(e -> {
+            pocionHuesoDePlatano.usar(luigi, areaTexto);
+            actualizarBarraEstado(luigi);  // Actualiza la barra de estado después de usar poción
+        });
+
+        botonUsarArma.addActionListener(e -> {
+            armaForyfay.usar(luigi, areaTexto);
+            actualizarBarraEstado(luigi);  // Actualiza la barra de estado después de equipar un arma
+        });
+
+        frame.setVisible(true);
+    }
+
+    private static void realizarBatalla(Personaje atacante, Enemigo defensor) {
+        if (atacante.estaVivo() && defensor.estaVivo()) {
+            atacante.atacar(defensor, areaTexto);
+            if (defensor.estaVivo()) {
+                defensor.atacar(atacante, areaTexto);
+                actualizarBarraEstado(atacante);
+            } else {
+                areaTexto.append(defensor.getNombre() + " ha sido derrotado.\n");
+            }
+        } else {
+            areaTexto.append("No se puede realizar la batalla. Alguien está muerto.\n");
+        }
+    }
+
+    private static void actualizarBarraEstado(Personaje personaje) {
+        barraEstado.setText(String.format("Salud: %d | Ataque: %d | Defensa: %d", personaje.getSalud(), personaje.getAtaque(), personaje.defensa));
+}
+}
