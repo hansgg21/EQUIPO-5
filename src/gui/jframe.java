@@ -63,7 +63,7 @@ public class jframe extends JFrame {
         panelJuego.setPreferredSize(new Dimension(WINDOW_WIDTH, PANEL_JUEGO_HEIGHT));
 
         /** Cargar y agregar imagen al panel de juego **/
-        JLabel imagenJuego = new JLabel(cargarImagenDesdeClasspath("/walleotravez.png", 400, 500));
+        JLabel imagenJuego = new JLabel(cargarImagenDesdeClasspath("/player.png", 400, 500));
         panelJuego.add(imagenJuego);
 
         return panelJuego;
@@ -76,7 +76,7 @@ public class jframe extends JFrame {
         barraAccion.setPreferredSize(new Dimension(WINDOW_WIDTH, BARRA_ACCION_HEIGHT));
 
         /** Cargar y agregar imagen a la barra de acción **/
-        JLabel imagenAccion = new JLabel(cargarImagenDesdeClasspath("/muñequito.png", 30, 40)); /** Ajustar tamaño aquí de la imagen **/
+        JLabel imagenAccion = new JLabel(cargarImagenDesdeClasspath("/enemigo.png", 30, 40)); /** Ajustar tamaño aquí de la imagen **/
         barraAccion.add(imagenAccion);
 
         /** Botones de acción personalizados **/

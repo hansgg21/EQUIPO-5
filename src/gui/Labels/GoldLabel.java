@@ -27,7 +27,7 @@ public class GoldLabel extends JLabel {
     }
 
     private void configurarEstilo() {
-        setForeground(new Color(57, 37, 6)); // Color dorado
+        setForeground(new Color(255, 252, 220)); // Color dorado
         setFont(new Font("Arial", Font.BOLD, 14));
     }
 }

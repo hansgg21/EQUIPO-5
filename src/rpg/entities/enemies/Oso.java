@@ -10,17 +10,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-public class WarriorOrc extends Enemy {
+public class Oso extends Enemy {
 
-    public WarriorOrc() {
-        super("Warrior Orc", 50, 12, EnemyType.INTERMEDIATE);
-        ImageCache.addImage("warrior_orc", "monoenojao.png");
+    public Oso() {
+        super("Mono feo", 50, 12, EnemyType.INTERMEDIATE);
+        ImageCache.addImage("monofeo", "monofeo.png");
         initCharacter(); // Inicializa las estadísticas del orco
     }
 
     @Override
     public void getLoot() {
-        System.out.println("The Warrior Orc drops a shiny sword.");
+        System.out.println("drops a shiny sword.");
     }
 
     @Override
@@ -58,9 +58,9 @@ public class WarriorOrc extends Enemy {
     }
 
     public ImageIcon getSprite() {
-        ImageIcon icon = new ImageIcon(getClass().getResource("/monoenojao.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/monofeo.png"));
         if (icon.getImageLoadStatus() != MediaTracker.COMPLETE) {
-            System.out.println("Error al cargar la imagen RookieGoblin: " + icon.getImageLoadStatus());
+            System.out.println("Error al cargar la imagen oso: " + icon.getImageLoadStatus());
         }
 
         // Redimensionar la imagen a un tamaño más pequeño (por ejemplo, 50x50)

@@ -1,8 +1,8 @@
 package rpg.factory;
 
 import rpg.entities.enemies.Enemy;
-import rpg.entities.enemies.RookieGoblin;
-import rpg.entities.enemies.WarriorOrc;
+import rpg.entities.enemies.Enemigo;
+import rpg.entities.enemies.Oso;
 
 import java.util.Random;
 
@@ -12,8 +12,8 @@ public class EnemyFactory {
     public static Enemy getEnemy() {
         // Lista de enemigos posibles
         Enemy[] enemies = {
-                new RookieGoblin(),
-                new WarriorOrc(),
+                new Enemigo(),
+                new Oso(),
         };
 
         // Selección aleatoria

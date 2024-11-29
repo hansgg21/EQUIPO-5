@@ -27,7 +27,7 @@ public class NameLabel extends JLabel {
     }
 
     private void configurarEstilo() {
-        setForeground(new Color(13, 17, 67)); // Color azul
+        setForeground(new Color(243, 227, 203)); // Color azul
         setFont(new Font("Arial", Font.BOLD, 14));
     }
 }

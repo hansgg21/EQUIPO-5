@@ -10,7 +10,7 @@ public class GameLabelUI extends JLabel {
     public GameLabelUI(String text) {
         super(text);
         setFont(createFont());
-        setForeground(new Color(57, 37, 6));  // Establecer el color del texto
+        setForeground(new Color(225, 212, 198));  // Establecer el color del texto
     }
 
     private Font createFont() {

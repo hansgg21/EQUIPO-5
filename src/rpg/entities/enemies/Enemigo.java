@@ -9,17 +9,17 @@ import rpg.utils.cache.ImageCache;
 import javax.swing.*;
 import java.awt.*;
 
-public class RookieGoblin extends Enemy {
+public class Enemigo extends Enemy {
 
-    public RookieGoblin() {
-        super("Rookie Goblin", 30, 7, EnemyType.BASIC);
-        ImageCache.addImage("rookie_goblin", "hongo.png");
+    public Enemigo() {
+        super("Enemigo", 30, 7, EnemyType.BASIC);
+        ImageCache.addImage("enemigo", "enemigo.png");
         initCharacter(); // Inicializa las estadísticas del goblin
     }
 
     @Override
     public void getLoot() {
-        System.out.println("The Rookie Goblin drops a small bag of coins.");
+        System.out.println("drops a small bag of coins.");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class RookieGoblin extends Enemy {
     }
 
     public ImageIcon getSprite() {
-        ImageIcon icon = new ImageIcon(getClass().getResource("/hongo.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/enemigo.png"));
         if (icon.getImageLoadStatus() != MediaTracker.COMPLETE) {
             System.out.println("Error al cargar la imagen RookieGoblin: " + icon.getImageLoadStatus());
         }
